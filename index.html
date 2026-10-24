@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LifeAssist AI</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#1f2937;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:#111827;
+    color:white;
+    padding:25px 15px;
+}
+
+.logo{
+    text-align:center;
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:30px;
+}
+
+.logo span{
+    color:#60a5fa;
+}
+
+.nav-btn{
+    width:100%;
+    padding:13px;
+    margin:6px 0;
+    border:none;
+    border-radius:10px;
+    background:#1f2937;
+    color:white;
+    text-align:left;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.nav-btn:hover{
+    background:#2563eb;
+    transform:translateX(3px);
+}
+
+.main{
+    margin-left:250px;
+    padding:30px;
+    min-height:100vh;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.hero{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    padding:45px;
+    border-radius:20px;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    font-size:17px;
+    opacity:0.95;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:30px;
+}
+
+.stat{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.06);
+}
+
+.stat h2{
+    font-size:28px;
+    color:#2563eb;
+}
+
+.stat p{
+    color:#6b7280;
+    margin-top:5px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.07);
+    cursor:pointer;
+    transition:0.25s;
+    border:2px solid transparent;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:#60a5fa;
+}
+
+.card-icon{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.card h3{
+    margin-bottom:8px;
+}
+
+.card p{
+    color:#6b7280;
+    line-height:1.5;
+}
+
+.back{
+    border:none;
+    background:white;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    margin-bottom:20px;
+    font-size:15px;
+}
+
+.back:hover{
+    background:#e5e7eb;
+}
+
+.tool-header{
+    background:white;
+    border-radius:18px;
+    padding:30px;
+    margin-bottom:20px;
+    text-align:center;
+    box-shadow:0 5px 18px rgba(0,0,0,0.06);
+}
+
+.big-icon{
+    font-size:55px;
+    margin-bottom:10px;
+}
+
+.tool-header h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.tool-header p{
+    color:#6b7280;
+}
+
+.tool-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.06);
+}
+
+.panel h2{
+    margin-bottom:18px;
+}
+
+.step{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    margin-bottom:15px;
+    line-height:1.5;
+}
+
+.number{
+    min-width:30px;
+    height:30px;
+    background:#2563eb;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.quick{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.quick button{
+    border:none;
+    background:#eff6ff;
+    color:#1d4ed8;
+    padding:10px 14px;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+.quick button:hover{
+    background:#dbeafe;
+}
+
+textarea{
+    width:100%;
+    min-height:150px;
+    resize:vertical;
+    padding:15px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    font-size:15px;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:#2563eb;
+}
+
+.ask{
+    width:100%;
+    margin-top:12px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.ask:hover{
+    background:#1d4ed8;
+}
+
+.answer{
+    margin-top:20px;
+    padding:18px;
+    border-radius:12px;
+    background:#f0fdf4;
+    border-left:5px solid #22c55e;
+    line-height:1.6;
+}
+
+@media(max-width:900px){
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .tool-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+    .main{
+        padding:15px;
+    }
+
+    .hero{
+        padding:25px;
+    }
+
+    .hero h1{
+        font-size:28px;
+    }
+
+    .stats,
+    .cards{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div class="logo">
+        Life<span>Assist</span> AI
+    </div>
+
+    <button class="nav-btn" onclick="dashboard()">
+        🏠 Dashboard
+    </button>
+
+    <button class="nav-btn" onclick="openTool('study')">
+        📚 Study Assistant
+    </button>
+
+    <button class="nav-btn" onclick="openTool('career')">
+        💼 Career Assistant
+    </button>
+
+    <button class="nav-btn" onclick="openTool('planner')">
+        🗓️ Life Planner
+    </button>
+
+    <button class="nav-btn" onclick="openTool('tech')">
+        💻 Tech Helper
+    </button>
+
+    <button class="nav-btn" onclick="openTool('language')">
+        🌐 Language Helper
+    </button>
+
+    <button class="nav-btn" onclick="openTool('ideas')">
+        💡 Idea Generator
+    </button>
+
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+
+        <div class="hero">
+            <h1>Welcome to LifeAssist AI 🤖</h1>
+            <p>
+                Your personal digital assistant for studying,
+                career planning, technology, language and ideas.
+            </p>
+        </div>
+
+
+        <div class="stats">
+
+            <div class="stat">
+                <h2>6</h2>
+                <p>AI Assistants</p>
+            </div>
+
+            <div class="stat">
+                <h2>24/7</h2>
+                <p>Available Anytime</p>
+            </div>
+
+            <div class="stat">
+                <h2>∞</h2>
+                <p>Questions & Ideas</p>
+            </div>
+
+        </div>
+
+
+        <h2 style="margin-bottom:18px;">
+            Choose an Assistant
+        </h2>
+
+
+        <div class="cards">
+
+            <div class="card" onclick="openTool('study')">
+                <div class="card-icon">📚</div>
+                <h3>Study Assistant</h3>
+                <p>
+                    Get help with study planning, exams,
+                    memory techniques and learning.
+                </p>
+            </div>
+
+
+            <div class="card" onclick="openTool('career')">
+                <div class="card-icon">💼</div>
+                <h3>Career Assistant</h3>
+                <p>
+                    Explore career preparation,
+                    interviews, resumes and skills.
+                </p>
+            </div>
+
+
+            <div class="card" onclick="openTool('planner')">
+                <div class="card-icon">🗓️</div>
+                <h3>Life Planner</h3>
+                <p>
+                    Organize your goals, daily tasks
+                    and time effectively.
+                </p>
+            </div>
+
+
+            <div class="card" onclick="openTool('tech')">
+                <div class="card-icon">💻</div>
+                <h3>Tech Helper</h3>
+                <p>
+                    Learn about computers, websites,
+                    coding and troubleshooting.
+                </p>
+            </div>
+
+
+            <div class="card" onclick="openTool('language')">
+                <div class="card-icon">🌐</div>
+                <h3>Language Helper</h3>
+                <p>
+                    Improve vocabulary, grammar,
+                    writing and communication.
+                </p>
+            </div>
+
+
+            <div class="card" onclick="openTool('ideas')">
+                <div class="card-icon">💡</div>
+                <h3>Idea Generator</h3>
+                <p>
+                    Generate creative project,
+                    business and technology ideas.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TOOL PAGE -->
+    <section id="toolPage" class="page">
+
+        <button class="back" onclick="dashboard()">
+            ← Back to Dashboard
+        </button>
+
+
+        <div class="tool-header">
+
+            <div id="toolIcon" class="big-icon">
+                🤖
+            </div>
+
+            <h1 id="toolTitle">
+                Assistant
+            </h1>
+
+            <p id="toolDescription">
+                Your intelligent assistant.
+            </p>
+
+        </div>
+
+
+        <div class="tool-grid">
+
+            <!-- LEFT PANEL -->
+            <div class="panel">
+
+                <h2 id="guideTitle">
+                    How to use this assistant
+                </h2>
+
+                <div id="guide"></div>
+
+
+                <h2 style="margin-top:25px;">
+                    Quick Actions
+                </h2>
+
+                <div id="quick" class="quick"></div>
+
+            </div>
+
+
+            <!-- RIGHT PANEL -->
+            <div class="panel">
+
+                <h2>
+                    Ask Your Assistant
+                </h2>
+
+                <textarea
+                    id="question"
+                    placeholder="Type your question here..."
+                ></textarea>
+
+                <button
+                    id="askButton"
+                    class="ask"
+                    onclick="askAssistant()"
+                >
+                    🤖 Ask Assistant
+                </button>
+
+                <div id="answer"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+/* =========================
+   ASSISTANT DATA
+========================= */
+
+const data = {
+
+    study: {
+        icon: "📚",
+        title: "Study Assistant",
+        description: "Improve your learning with simple study guidance.",
+
+        steps: [
+            "Tell me what subject you are studying.",
+            "Ask about exams, revision or difficult topics.",
+            "Use the quick actions for common study tasks."
+        ],
+
+        actions: [
+            "How can I prepare for an exam?",
+            "How can I remember what I study?",
+            "Create a study plan"
+        ]
+    },
+
+
+    career: {
+        icon: "💼",
+        title: "Career Assistant",
+        description: "Get guidance for interviews, resumes and career development.",
+
+        steps: [
+            "Tell me about the career you are interested in.",
+            "Ask about interviews, resumes or skills.",
+            "Use the quick actions to explore career preparation."
+        ],
+
+        actions: [
+            "How should I prepare for an interview?",
+            "How can I improve my resume?",
+            "What skills should I learn?"
+        ]
+    },
+
+
+    planner: {
+        icon: "🗓️",
+        title: "Life Planner",
+        description: "Organize your goals and daily activities.",
+
+        steps: [
+            "Tell me what you want to accomplish.",
+            "Ask for help organizing your time.",
+            "Use quick actions to create a simple plan."
+        ],
+
+        actions: [
+            "Create a daily schedule",
+            "How can I manage my time?",
+            "Help me set goals"
+        ]
+    },
+
+
+    tech: {
+        icon: "💻",
+        title: "Tech Helper",
+        description: "Get simple technology and coding guidance.",
+
+        steps: [
+            "Describe your technology problem.",
+            "Tell me what you are trying to build.",
+            "Ask about HTML, CSS, JavaScript or computers."
+        ],
+
+        actions: [
+            "How do I create a website?",
+            "What is JavaScript?",
+            "My code is not working"
+        ]
+    },
+
+
+    language: {
+        icon: "🌐",
+        title: "Language Helper",
+        description: "Improve vocabulary and communication.",
+
+        steps: [
+            "Ask about grammar or vocabulary.",
+            "Practice writing and communication.",
+            "Ask for explanations of language concepts."
+        ],
+
+        actions: [
+            "How can I improve my English?",
+            "Give me vocabulary tips",
+            "How can I improve my writing?"
+        ]
+    },
+
+
+    ideas: {
+        icon: "💡",
+        title: "Idea Generator",
+        description: "Turn problems into useful project ideas.",
+
+        steps: [
+            "Tell me what type of idea you want.",
+            "Mention your interests or skills.",
+            "Ask for website, AI or school project ideas."
+        ],
+
+        actions: [
+            "Give me an AI project idea",
+            "Give me a website project idea",
+            "Give me a student project idea"
+        ]
+    }
+
+};
+
+
+let currentTool = "career";
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function dashboard(){
+
+    document
+        .getElementById("toolPage")
+        .classList
+        .remove("active");
+
+    document
+        .getElementById("dashboard")
+        .classList
+        .add("active");
+
+    window.scrollTo(0,0);
+}
+
+
+/* =========================
+   OPEN ASSISTANT
+========================= */
+
+function openTool(name){
+
+    currentTool = name;
+
+    const tool = data[name];
+
+    document
+        .getElementById("dashboard")
+        .classList
+        .remove("active");
+
+    document
+        .getElementById("toolPage")
+        .classList
+        .add("active");
+
+
+    document.getElementById("toolIcon").textContent =
+        tool.icon;
+
+    document.getElementById("toolTitle").textContent =
+        tool.title;
+
+    document.getElementById("toolDescription").textContent =
+        tool.description;
+
+
+    document.getElementById("guide").innerHTML =
+        tool.steps.map(function(step,index){
+
+            return `
+                <div class="step">
+                    <span class="number">${index + 1}</span>
+                    <span>${step}</span>
+                </div>
+            `;
+
+        }).join("");
+
+
+    document.getElementById("quick").innerHTML =
+        tool.actions.map(function(action){
+
+            return `
+                <button onclick="quickAction(${JSON.stringify(action)})">
+                    ${action}
+                </button>
+            `;
+
+        }).join("");
+
+
+    document.getElementById("question").value = "";
+
+    document.getElementById("answer").innerHTML = "";
+
+    window.scrollTo(0,0);
+}
+
+
+/* =========================
+   QUICK ACTION
+========================= */
+
+function quickAction(text){
+
+    document.getElementById("question").value = text;
+
+    askAssistant();
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================
+   ASK ASSISTANT
+========================= */
+
+function askAssistant(){
+
+    const question =
+        document
+        .getElementById("question")
+        .value
+        .trim();
+
+
+    const answer =
+        document.getElementById("answer");
+
+
+    if(question === ""){
+
+        answer.innerHTML =
+            "<b>Please type a question first.</b>";
+
+        return;
+    }
+
+
+    const q = question.toLowerCase();
+
+    let response = "";
+
+
+    /* =====================
+       STUDY
+    ===================== */
+
+    if(currentTool === "study"){
+
+        if(
+            q.includes("exam") ||
+            q.includes("test") ||
+            q.includes("prepare")
+        ){
+
+            response = `
+                <b>📚 Exam Preparation</b><br><br>
+
+                Start by listing the topics you need to study.
+                Divide them into smaller sections and study one
+                section at a time.
+
+                <br><br>
+
+                A simple routine is:
+                <br>1. Learn the topic.
+                <br>2. Make short notes.
+                <br>3. Practice questions.
+                <br>4. Review mistakes.
+                <br>5. Take short breaks.
+            `;
+
+        }
+
+        else if(
+            q.includes("remember") ||
+            q.includes("memory") ||
+            q.includes("memorize")
+        ){
+
+            response = `
+                <b>🧠 Memory Tips</b><br><br>
+
+                Try active recall instead of only reading your notes.
+                Close your book and explain the topic using your
+                own words.
+
+                <br><br>
+
+                You can also use flashcards, practice questions
+                and spaced revision.
+            `;
+
+        }
+
+        else if(
+            q.includes("math") ||
+            q.includes("equation") ||
+            q.includes("algebra")
+        ){
+
+            response = `
+                <b>➗ Math Study Tip</b><br><br>
+
+                For mathematics, focus on understanding the steps
+                instead of memorizing only the final answer.
+
+                <br><br>
+
+                Try solving one example yourself, then solve a
+                similar problem without looking at the solution.
+            `;
+
+        }
+
+        else if(
+            q.includes("plan") ||
+            q.includes("schedule") ||
+            q.includes("study")
+        ){
+
+            response = `
+                <b>📅 Study Plan</b><br><br>
+
+                Choose 2–3 important topics for the day.
+                Study in focused sessions and include short breaks.
+
+                <br><br>
+
+                Example:
+                <br>• Session 1 — Learn
+                <br>• Session 2 — Practice
+                <br>• Session 3 — Review
+            `;
+
+        }
+
+        else{
+
+            response = `
+                <b>📖 Study Guidance</b><br><br>
+
+                Break your topic into smaller sections,
+                understand the main ideas, practice what you
+                learned and review it later.
+
+                <br><br>
+
+                The more actively you practice, the easier it
+                becomes to remember the material.
+            `;
+        }
+    }
+
+
+    /* =====================
+       CAREER
+    ===================== */
+
+    else if(currentTool === "career"){
+
+        if(
+            q.includes("interview") ||
+            q.includes("interviews")
+        ){
+
+            response = `
+                <b>💼 Interview Preparation</b><br><br>
+
+                Prepare a short introduction about yourself,
+                research the role and practice explaining your
+                skills and projects.
+
+                <br><br>
+
+                Practice questions such as:
+                <br>• Tell me about yourself.
+                <br>• What are your strengths?
+                <br>• Why are you interested in this field?
+                <br>• Tell me about a project you worked on.
+            `;
+
+        }
+
+        else if(
+            q.includes("resume") ||
+            q.includes("cv")
+        ){
+
+            response = `
+                <b>📄 Resume Guidance</b><br><br>
+
+                Keep your resume clear and easy to scan.
+
+                <br><br>
+
+                Include:
+                <br>• Education
+                <br>• Skills
+                <br>• Projects
+                <br>• Achievements
+                <br>• Relevant experience
+
+                <br><br>
+
+                For students, projects can be a great way to
+                demonstrate practical skills.
+            `;
+
+        }
+
+        else if(
+            q.includes("introduce") ||
+            q.includes("introduction") ||
+            q.includes("tell me about yourself")
+        ){
+
+            response = `
+                <b>🎤 Self Introduction</b><br><br>
+
+                A simple introduction can contain three parts:
+                <br><br>
+
+                1. Who you are.
+                <br>
+                2. What you are currently learning or doing.
+                <br>
+                3. What type of opportunity or field interests you.
+
+                <br><br>
+
+                Keep it natural and short.
+            `;
+
+        }
+
+        else if(
+            q.includes("skill") ||
+            q.includes("learn")
+        ){
+
+            response = `
+                <b>🚀 Skill Development</b><br><br>
+
+                Choose skills that match your interests and
+                career goals.
+
+                <br><br>
+
+                A good approach is to learn one skill at a time,
+                practice it through small projects and keep
+                improving through feedback.
+            `;
+
+        }
+
+        else{
+
+            response = `
+                <b>💼 Career Guidance</b><br><br>
+
+                Start by identifying your interests and strengths.
+                Then explore careers that match them.
+
+                <br><br>
+
+                Building useful skills and completing small
+                projects can help you understand what you enjoy.
+            `;
+        }
+    }
+
+
+    /* =====================
+       PLANNER
+    ===================== */
+
+    else if(currentTool === "planner"){
+
+        if(
+            q.includes("schedule") ||
+            q.includes("daily") ||
+            q.includes("routine")
+        ){
+
+            response = `
+                <b>🗓️ Daily Schedule</b><br><br>
+
+                Start with your most important tasks.
+
+                <br><br>
+
+                Example:
+                <br>• Morning — Important task
+                <br>• Afternoon — Study or project
+                <br>• Evening — Review and prepare for tomorrow
+                <br>• Breaks — Take regular short breaks
+            `;
+
+        }
+
+        else if(
+            q.includes("time") ||
+            q.includes("manage")
+        ){
+
+            response = `
+                <b>⏰ Time Management</b><br><br>
+
+                Choose your top 3 priorities for the day.
+                Break large tasks into smaller steps and avoid
+                trying to do everything at once.
+
+                <br><br>
+
+                A simple to-do list can make your day much easier
+                to organize.
+            `;
+
+        }
+
+        else if(
+            q.includes("goal") ||
+            q.includes("goals")
+        ){
+
+            response = `
+                <b>🎯 Goal Setting</b><br><br>
+
+                Make your goal specific and divide it into
+                smaller actions.
+
+                <br><br>
+
+                For example:
+                <br>Goal → Learn web development
+                <br>Step 1 → Learn HTML
+                <br>Step 2 → Learn CSS
+                <br>Step 3 → Build a small website
+            `;
+
+        }
+
+        else{
+
+            response = `
+                <b>🗓️ Planning Tip</b><br><br>
+
+                Write down what you want to accomplish,
+                decide which tasks are most important and
+                give yourself realistic time to complete them.
+
+                <br><br>
+
+                Remember to include breaks and time for rest.
+            `;
+        }
+    }
+
+
+    /* =====================
+       TECH
+    ===================== */
+
+    else if(currentTool === "tech"){
+
+        if(
+            q.includes("website") ||
+            q.includes("html") ||
+            q.includes("css")
+        ){
+
+            response = `
+                <b>💻 Website Basics</b><br><br>
+
+                HTML creates the structure of a webpage.
+                CSS controls its appearance and layout.
+                JavaScript adds interaction.
+
+                <br><br>
+
+                A simple website can start with:
+                <br>• HTML
+                <br>• CSS
+                <br>• JavaScript
+            `;
+
+        }
+
+        else if(
+            q.includes("javascript") ||
+            q.includes("js")
+        ){
+
+            response = `
+                <b>🟨 JavaScript</b><br><br>
+
+                JavaScript is a programming language commonly
+                used to make websites interactive.
+
+                <br><br>
+
+                For example, JavaScript can respond when a user
+                clicks a button, types something or submits a form.
+            `;
+
+        }
+
+        else if(
+            q.includes("error") ||
+            q.includes("bug") ||
+            q.includes("not working")
+        ){
+
+            response = `
+                <b>🔧 Troubleshooting</b><br><br>
+
+                First check the browser console for error messages.
+
+                <br><br>
+
+                Then check:
+                <br>1. Spelling of function and variable names.
+                <br>2. Missing brackets or quotation marks.
+                <br>3. Missing HTML closing tags.
+                <br>4. Whether your JavaScript is inside the script tag.
+            `;
+
+        }
+
+        else{
+
+            response = `
+                <b>💻 Tech Help</b><br><br>
+
+                Technology problems are easier to solve when you
+                break them into smaller parts.
+
+                <br><br>
+
+                Describe what you are trying to do, what happened
+                instead and any error message you see.
+            `;
+        }
+    }
+
+
+    /* =====================
+       LANGUAGE
+    ===================== */
+
+    else if(currentTool === "language"){
+
+        if(
+            q.includes("grammar") ||
+            q.includes("english")
+        ){
+
+            response = `
+                <b>🌐 English Practice</b><br><br>
+
+                Try reading short English articles and writing
+                a few sentences every day.
+
+                <br><br>
+
+                When you make a mistake, correct it and try using
+                the same grammar pattern again.
+            `;
+
+        }
+
+        else if(
+            q.includes("vocabulary") ||
+            q.includes("word")
+        ){
+
+            response = `
+                <b>📖 Vocabulary Tips</b><br><br>
+
+                Learn new words in context instead of memorizing
+                isolated definitions.
+
+                <br><br>
+
+                Write the word, its meaning and one example
+                sentence. Then review it later.
+            `;
+
+        }
+
+        else if(
+            q.includes("writing") ||
+            q.includes("write")
+        ){
+
+            response = `
+                <b>✍️ Writing Tips</b><br><br>
+
+                Start by deciding what you want the reader to
+                understand.
+
+                <br><br>
+
+                Use short paragraphs, clear sentences and a logical
+                order. Always reread your writing before finishing.
+            `;
+
+        }
+
+        else{
+
+            response = `
+                <b>🌐 Language Guidance</b><br><br>
+
+                Regular practice is one of the best ways to improve
+                communication.
+
+                <br><br>
+
+                Read, listen, write and speak regularly.
+                Focus on understanding rather than memorizing
+                everything at once.
+            `;
+        }
+    }
+
+
+    /* =====================
+       IDEAS
+    ===================== */
+
+    else if(currentTool === "ideas"){
+
+        if(
+            q.includes("ai") ||
+            q.includes("artificial intelligence")
+        ){
+
+            response = `
+                <b>🤖 AI Project Idea</b><br><br>
+
+                Build an AI-powered Student Assistant.
+
+                <br><br>
+
+                It could help students organize study tasks,
+                generate learning suggestions and provide
+                simple explanations.
+
+                <br><br>
+
+                You could build the interface using HTML, CSS
+                and JavaScript.
+            `;
+
+        }
+
+        else if(
+            q.includes("website") ||
+            q.includes("project")
+        ){
+
+            response = `
+                <b>💡 Website Project Idea</b><br><br>
+
+                Build a Personal Productivity Dashboard.
+
+                <br><br>
+
+                Features could include:
+                <br>• Task list
+                <br>• Study timer
+                <br>• Goal tracker
+                <br>• Notes
+                <br>• Progress section
+            `;
+
+        }
+
+        else if(
+            q.includes("student") ||
+            q.includes("school")
+        ){
+
+            response = `
+                <b>🎓 Student Project Idea</b><br><br>
+
+                Create a Student Resource Hub.
+
+                <br><br>
+
+                It could contain study tips, subject resources,
+                a planner, useful links and a simple progress
+                tracker.
+            `;
+
+        }
+
+        else{
+
+            response = `
+                <b>💡 Creative Idea</b><br><br>
+
+                Try building something that solves a small,
+                real-world problem.
+
+                <br><br>
+
+                Think about problems students, families or
+                communities face and turn one of those problems
+                into a simple digital solution.
+            `;
+        }
+    }
+
+
+    /* =====================
+       SHOW ANSWER
+    ===================== */
+
+    answer.innerHTML =
+        escapeHTML(response)
+            .replace(/&lt;br&gt;/g,"<br>")
+            .replace(/&lt;b&gt;/g,"<b>")
+            .replace(/&lt;\/b&gt;/g,"</b>");
+
+}
+</script>
+
+</body>
+</html>
